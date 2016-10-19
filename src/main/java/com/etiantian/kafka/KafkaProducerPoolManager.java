@@ -4,6 +4,7 @@ import com.etiantian.kafka.producer.EttKafkaProducer;
 import com.etiantian.kafka.util.KafkaProducerGenerator;
 import kafka.producer.KeyedMessage;
 
+import java.io.InputStream;
 import java.util.Properties;
 
 /**
@@ -24,23 +25,23 @@ public class KafkaProducerPoolManager {
         kafkaProperties = new Properties();
         try{
 
-            kafkaProperties.put("metadata.broker.list","192.168.136.128:9092");
-            kafkaProperties.put("partitioner.class","com.etiantian.kafka.producer.EttPartitioner");
-            kafkaProperties.put("producer.type","sync");
-            kafkaProperties.put("request.required.acks","0");
-            kafkaProperties.put("message.send.max.retries","3");
-            kafkaProperties.put("topic.metadata.refresh.interval.ms","600000");
-            kafkaProperties.put("compression.codec","snappy");
-            kafkaProperties.put("serializer.class","kafka.serializer.StringEncoder");
-            kafkaProperties.put("queue.buffering.max.ms","5000");
-            kafkaProperties.put("queue.buffering.max.messages","10000");
-            kafkaProperties.put("queue.enqueue.timeout.ms","-1");
-            kafkaProperties.put("batch.num.messages","2000");
-            kafkaProperties.put("poolMinIdle","256");
-            kafkaProperties.put("poolMaxIdle","512");
-            kafkaProperties.put("poolMaxTotal","1024");
-            //InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream("./producer.properties");
-            //kafkaProperties.load(is);
+//            kafkaProperties.put("metadata.broker.list","192.168.136.128:9092");
+//            kafkaProperties.put("partitioner.class","com.etiantian.kafka.producer.EttPartitioner");
+//            kafkaProperties.put("producer.type","sync");
+//            kafkaProperties.put("request.required.acks","0");
+//            kafkaProperties.put("message.send.max.retries","3");
+//            kafkaProperties.put("topic.metadata.refresh.interval.ms","600000");
+//            kafkaProperties.put("compression.codec","snappy");
+//            kafkaProperties.put("serializer.class","kafka.serializer.StringEncoder");
+//            kafkaProperties.put("queue.buffering.max.ms","5000");
+//            kafkaProperties.put("queue.buffering.max.messages","10000");
+//            kafkaProperties.put("queue.enqueue.timeout.ms","-1");
+//            kafkaProperties.put("batch.num.messages","2000");
+//            kafkaProperties.put("poolMinIdle","256");
+//            kafkaProperties.put("poolMaxIdle","512");
+//            kafkaProperties.put("poolMaxTotal","1024");
+            InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream("./producer.properties");
+            kafkaProperties.load(is);
         }catch (Exception e){
             logger.error(e.getMessage());
         }
