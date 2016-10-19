@@ -14,18 +14,16 @@ import java.util.Properties;
 public class KafkaPoolFactory extends BasePooledObjectFactory<Producer<String,String>> {
 
     private final Properties properties;
-    private final int poolSize;
 
-    public KafkaPoolFactory(Properties properties , int poolSize){
+    public KafkaPoolFactory(Properties properties){
         this.properties = properties;
-        this.poolSize = poolSize;
     }
 
     public Producer<String, String> create() throws Exception {
-        return new Producer<>(new ProducerConfig(properties));
+        return new Producer(new ProducerConfig(properties));
     }
 
     public PooledObject<Producer<String, String>> wrap(Producer<String, String> stringStringProducer) {
-        return new DefaultPooledObject<>(stringStringProducer);
+        return new DefaultPooledObject(stringStringProducer);
     }
 }

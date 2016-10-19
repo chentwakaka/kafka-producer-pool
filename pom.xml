@@ -12,10 +12,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
-                </configuration>
             </plugin>
         </plugins>
     </build>
@@ -24,7 +20,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <kafka.version>0.10.0.1</kafka.version>
+        <kafka.version>0.8.2.2</kafka.version>
         <apache-commons.version>2.4.2</apache-commons.version>
     </properties>
 

@@ -4,16 +4,15 @@ import kafka.javaapi.producer.Producer;
 import kafka.producer.KeyedMessage;
 import org.apache.commons.pool2.impl.GenericObjectPool;
 
-import java.util.List;
 
 /**
  * Created by chentong on 2016/9/30.
  */
-public class KafkaProducer {
+public class EttKafkaProducer {
 
     private final GenericObjectPool<Producer<String, String>> pool;
 
-    public KafkaProducer(GenericObjectPool<Producer<String, String>> pool) {
+    public EttKafkaProducer(GenericObjectPool<Producer<String, String>> pool) {
         this.pool = pool;
     }
 
@@ -24,7 +23,7 @@ public class KafkaProducer {
             producer.send(message);
         }  finally {
             if (producer != null) {
-                //pool.returnObject(producer);
+                pool.returnObject(producer);
             }
         }
     }

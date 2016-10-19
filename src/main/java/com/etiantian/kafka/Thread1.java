@@ -7,6 +7,6 @@ import com.etiantian.kafka.KafkaProducerPoolManager;
  */
 public class Thread1 extends Thread {
     public void run(){
-        KafkaProducerPoolManager.getInstance().send("logTopic","thread");
+        KafkaProducerPoolManager.getInstance().send("logTopic","logTopicKey","thread");
     }
 }

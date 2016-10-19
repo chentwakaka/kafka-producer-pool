@@ -1,7 +1,7 @@
 package com.etiantian.kafka.util;
 
 import com.etiantian.kafka.pool.KafkaPoolFactory;
-import com.etiantian.kafka.producer.KafkaProducer;
+import com.etiantian.kafka.producer.EttKafkaProducer;
 import kafka.javaapi.producer.Producer;
 import org.apache.commons.pool2.impl.GenericObjectPool;
 
@@ -13,27 +13,25 @@ import java.util.Properties;
 public class KafkaProducerGenerator {
 
     private final Properties properties;
-    private final int poolSize;
-    private KafkaProducer kafkaProducer;
+    private EttKafkaProducer ettKafkaProducer;
     private GenericObjectPool<Producer<String, String>> pool;
 
-    public KafkaProducerGenerator(Properties properties, int poolSize){
+    public KafkaProducerGenerator(Properties properties){
         this.properties = properties;
-        this.poolSize = poolSize;
-        this.pool = generatePool(properties, poolSize);
-        this.kafkaProducer = new KafkaProducer(pool);
+        this.pool = generatePool(properties);
+        this.ettKafkaProducer = new EttKafkaProducer(pool);
     }
 
-    protected GenericObjectPool<Producer<String, String>> generatePool(Properties properties, int poolSize) {
-        GenericObjectPool<Producer<String, String>> pool = new GenericObjectPool<>(new KafkaPoolFactory(properties,poolSize));
-        pool.setMinIdle(poolSize);
-        pool.setMaxIdle(poolSize);
-        pool.setMaxTotal(poolSize*2);
+    protected GenericObjectPool<Producer<String, String>> generatePool(Properties properties) {
+        GenericObjectPool<Producer<String, String>> pool = new GenericObjectPool(new KafkaPoolFactory(properties));
+        pool.setMinIdle(properties.get("poolMinIdle")==null ? 256 : Integer.parseInt(properties.get("poolMinIdle").toString()));
+        pool.setMaxIdle(properties.get("poolMaxIdle")==null ? 512 : Integer.parseInt(properties.get("poolMaxIdle").toString()));
+        pool.setMaxTotal(properties.get("poolMaxTotal")==null ? 1024 : Integer.parseInt(properties.get("poolMaxTotal").toString()));
         return pool;
     }
 
-    public KafkaProducer getKafkaProducer(){
-        return this.kafkaProducer;
+    public EttKafkaProducer getEttKafkaProducer(){
+        return this.ettKafkaProducer;
     }
 
     public void stop(){
@@ -46,6 +44,6 @@ public class KafkaProducerGenerator {
 
     protected void setPool(GenericObjectPool<Producer<String, String>> pool){
         this.pool = pool;
-        this.kafkaProducer = new KafkaProducer(pool);
+        this.ettKafkaProducer = new EttKafkaProducer(pool);
     }
 }

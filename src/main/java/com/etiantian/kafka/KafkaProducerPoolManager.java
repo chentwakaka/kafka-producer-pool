@@ -1,6 +1,6 @@
 package com.etiantian.kafka;
 
-import com.etiantian.kafka.producer.KafkaProducer;
+import com.etiantian.kafka.producer.EttKafkaProducer;
 import com.etiantian.kafka.util.KafkaProducerGenerator;
 import kafka.producer.KeyedMessage;
 
@@ -25,7 +25,7 @@ public class KafkaProducerPoolManager {
         try{
 
             kafkaProperties.put("metadata.broker.list","192.168.136.128:9092");
-            kafkaProperties.put("partitioner.class","kafka.producer.DefaultPartitioner");
+            kafkaProperties.put("partitioner.class","com.etiantian.kafka.producer.EttPartitioner");
             kafkaProperties.put("producer.type","sync");
             kafkaProperties.put("request.required.acks","0");
             kafkaProperties.put("message.send.max.retries","3");
@@ -36,6 +36,9 @@ public class KafkaProducerPoolManager {
             kafkaProperties.put("queue.buffering.max.messages","10000");
             kafkaProperties.put("queue.enqueue.timeout.ms","-1");
             kafkaProperties.put("batch.num.messages","2000");
+            kafkaProperties.put("poolMinIdle","256");
+            kafkaProperties.put("poolMaxIdle","512");
+            kafkaProperties.put("poolMaxTotal","1024");
             //InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream("./producer.properties");
             //kafkaProperties.load(is);
         }catch (Exception e){
@@ -58,7 +61,7 @@ public class KafkaProducerPoolManager {
     public void init() {
 
         try{
-            kafkaProducerGenerator = new KafkaProducerGenerator(kafkaProperties,1000);
+            kafkaProducerGenerator = new KafkaProducerGenerator(kafkaProperties);
             logger.info("init kafkaProducerGenerator success");
         }catch (Exception e){
             logger.error(e);
@@ -70,14 +73,14 @@ public class KafkaProducerPoolManager {
      * @param topicName
      * @param message
      */
-    public void send(String topicName,String message) {
+    public void send(String topicName,String key,String message) {
         if(topicName == null || message == null){
             return;
         }
         try{
-            KafkaProducer producer = getKafkaProducer();
+            EttKafkaProducer producer = getKafkaProducer();
             if(producer!=null)
-                producer.send(new KeyedMessage<String, String>(topicName,message));
+                producer.send(new KeyedMessage(topicName,key,message));
 
             logger.info("topicName="+topicName+"#####message="+message);
         }catch (Exception e){
@@ -92,14 +95,14 @@ public class KafkaProducerPoolManager {
      * get producer
      * @return
      */
-    public KafkaProducer getKafkaProducer(){
+    public EttKafkaProducer getKafkaProducer(){
 
         try{
             if(kafkaProducerGenerator==null){
                 logger.info("kafkaProducerGenerator is null to init**********");
                 init();
             }
-            return kafkaProducerGenerator.getKafkaProducer();
+            return kafkaProducerGenerator.getEttKafkaProducer();
         }catch (Exception e){
             logger.error(e);
         }
