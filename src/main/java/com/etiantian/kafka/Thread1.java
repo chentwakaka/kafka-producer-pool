@@ -1,6 +1,5 @@
 package com.etiantian.kafka;
 
-import com.etiantian.kafka.KafkaProducerPoolManager;
 
 /**
  * Created by chentong on 2016/10/11.
