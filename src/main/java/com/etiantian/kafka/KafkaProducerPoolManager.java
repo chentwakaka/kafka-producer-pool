@@ -40,7 +40,7 @@ public class KafkaProducerPoolManager {
 //            kafkaProperties.put("poolMinIdle","256");
 //            kafkaProperties.put("poolMaxIdle","512");
 //            kafkaProperties.put("poolMaxTotal","1024");
-            InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream("./producer.properties");
+            InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream("./properties/producer.properties");
             kafkaProperties.load(is);
         }catch (Exception e){
             logger.error(e.getMessage());
